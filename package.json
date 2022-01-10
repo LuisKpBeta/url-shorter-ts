@@ -4,6 +4,10 @@
   "description": "encurtador de urls",
   "main": "server.js",
   "scripts": {
+    "start": "node dist/server.js",
+    "build": "tsc -p tsconfig-build.json",
+    "docker:up":"npm run build && docker-compose up --build -d",
+    "docker:down":"docker-compose down",
     "test": "jest",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts"
   },

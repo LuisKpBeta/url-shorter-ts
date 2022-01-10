@@ -1,0 +1,41 @@
+version: "3.5"
+
+services:
+  encurtador_db:
+    container_name: encurtador_db
+    image: postgres:13.0-alpine
+    restart: always
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5433:5433
+    networks:
+      - encurtador
+
+  encurtador_redis:
+    image: redis:5
+    container_name: encurtador_redis
+    ports:
+      - 6373:6373
+    restart: always
+    networks:
+      - encurtador
+      
+  api:
+    container_name: encurtador_api
+    image: encurtador-api
+    build: . 
+    restart: always
+    depends_on:
+      - encurtador_db
+      - encurtador_redis
+    command: bash -c "npm install --only=prod && npm start"
+    ports:
+      - "3030:3030"
+    networks:
+      - encurtador
+
+networks:
+  encurtador:
+    name: encurtador
