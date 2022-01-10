@@ -1,0 +1,38 @@
+{
+  "name": "encurtador",
+  "version": "1.0.0",
+  "description": "encurtador de urls",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts"
+  },
+  "keywords": [
+    "url",
+    "ecurtador"
+  ],
+  "author": "Luis Carlos Galvão",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "pg": "^8.7.1",
+    "typeorm": "^0.2.41"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.4.7",
+    "mockdate": "^3.0.5",
+    "ts-jest": "^27.1.2",
+    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.4"
+  }
+}
