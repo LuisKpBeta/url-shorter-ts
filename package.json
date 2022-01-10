@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc -p tsconfig-build.json",
-    "docker:up":"npm run build && docker-compose up --build -d",
-    "docker:down":"docker-compose down",
+    "migrate":"npx prisma migrate dev --name init",
+    "migrate:deploy":"npx prisma migrate deploy",
+    "docker:up": "npm run build && docker-compose up --build -d",
+    "docker:down": "docker-compose down",
     "test": "jest",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts"
   },
@@ -18,9 +20,10 @@
   "author": "Luis Carlos Galvão",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^3.7.0",
     "express": "^4.17.2",
     "pg": "^8.7.1",
-    "typeorm": "^0.2.41"
+    "prisma": "^3.7.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

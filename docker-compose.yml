@@ -1,15 +1,23 @@
-version: "3.5"
+version: "3.8"
 
 services:
-  encurtador_db:
-    container_name: encurtador_db
-    image: postgres:13.0-alpine
-    restart: always
+  encurtadordb:
+    container_name: encurtadordb
+    image: postgres:13
+    restart: unless-stopped
     environment:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=encurtador
     ports:
-      - 5433:5433
+      - 5433:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres-enc-volume:/var/lib/postgresql/data
     networks:
       - encurtador
 
@@ -27,10 +35,13 @@ services:
     image: encurtador-api
     build: . 
     restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@encurtadordb:5432/encurtador?connect_timeout=300
     depends_on:
-      - encurtador_db
-      - encurtador_redis
-    command: bash -c "npm install --only=prod && npm start"
+      encurtadordb:
+          condition: "service_healthy"
+      
+    command: bash -c "npm run migrate:deploy && npm start"
     ports:
       - "3030:3030"
     networks:
@@ -38,4 +49,7 @@ services:
 
 networks:
   encurtador:
-    name: encurtador
+
+
+volumes:
+  postgres-enc-volume:
