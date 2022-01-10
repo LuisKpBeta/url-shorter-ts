@@ -19,7 +19,7 @@ export class CreateLinkService{
     }
 
     private generateToken():string{
-        const newToken = crypto.randomBytes(8).toString('hex')
+        const newToken = crypto.randomBytes(4).toString('hex')
         return newToken
     }
 }   

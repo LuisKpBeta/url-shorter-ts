@@ -15,7 +15,7 @@ const makeRepository = (): CreateLinkRepository => {
         async create(newLink: CreateLink): Promise<Link> {
             const link = {
                 ...newLink,
-                id: 'any_id',
+                id: 0,
                 created: new Date()
             }
             return await Promise.resolve(link)
@@ -41,7 +41,7 @@ describe('Create Link', () => {
     test('Should create a link with success', async () => {
         const { sut } = makeSut()
         const link = await sut.create('link')
-        expect(link.id).toBe('any_id')
+        expect(link.id).toBe(0)
         expect(link.originalUrl).toBe('link')
         expect(link.urlToken).toBe('token')
     })
