@@ -4,29 +4,41 @@ import { FindLinkRepository } from "./protocols/findLink";
 
 import { prisma } from './index'
 import { RedisHelper } from "./redis.index";
+import { DeleteLinkIfExpiresRepository } from "./protocols/deleteLink";
 
-export class LinkRepository implements CreateLinkRepository, FindLinkRepository {
+export class LinkRepository implements CreateLinkRepository, FindLinkRepository, DeleteLinkIfExpiresRepository {
+    async deleteIfExpires(): Promise<void> {
+        await prisma.link.deleteMany({
+            where: {
+                expires: {
+                    gte: new Date()
+                }
+            }
+        })
+    }
     async create(newLink: CreateLink): Promise<Link> {
         const link = await prisma.link.create({
-            data:{
+            data: {
                 ...newLink,
                 created: new Date()
             }
         })
-        RedisHelper.client.set(newLink.urlToken, JSON.stringify(link) )
+        RedisHelper.client.set(newLink.urlToken, JSON.stringify(link), {
+            EX: 60 * 60 * 24
+        })
         return link
     }
     async findByToken(token: string): Promise<Link> {
         const linkInCache = await RedisHelper.client.get(token)
-        if(linkInCache){
+        if (linkInCache) {
             return JSON.parse(linkInCache)
         }
         const link = await prisma.link.findFirst({
-            where:{
-                urlToken:token
+            where: {
+                urlToken: token
             }
         })
-        if(link){
+        if (link) {
             RedisHelper.client.set(link.urlToken, JSON.stringify(link))
             return link
         }
