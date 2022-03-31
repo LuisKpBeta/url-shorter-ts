@@ -24,8 +24,10 @@ services:
   encurtador_redis:
     image: redis:5
     container_name: encurtador_redis
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
     ports:
-      - 6373:6373
+      - 6379:6379
     restart: always
     networks:
       - encurtador
@@ -37,7 +39,10 @@ services:
     restart: always
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@encurtadordb:5432/encurtador?connect_timeout=300
+      - REDIS_URL=redis://encurtador_redis:6379/
     depends_on:
+      encurtador_redis:
+          condition: "service_healthy" 
       encurtadordb:
           condition: "service_healthy"
       
