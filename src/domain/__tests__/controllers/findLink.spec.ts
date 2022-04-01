@@ -18,7 +18,7 @@ const insertLink = async (): Promise<Link> => {
     return link
 }
 
-describe('Create Link Controller', () => {
+describe('Find Link Controller', () => {
     beforeAll(() => {
         MockDate.set(new Date())
     })
