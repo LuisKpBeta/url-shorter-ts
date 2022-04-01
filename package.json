@@ -10,7 +10,7 @@
     "migrate:deploy": "npx prisma migrate deploy",
     "docker:up": "npm run build && docker-compose up --build -d",
     "docker:down": "docker-compose down",
-    "test": "jest --watch",
+    "test": "jest --watch --runInBand",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts"
   },
   "keywords": [
